@@ -129,7 +129,13 @@ int cil_add_decl_to_symtab(struct cil_db *db, symtab_t *symtab, hashtab_key_t ke
 				cil_node_to_string(node), key);
 			cil_tree_log(node, CIL_ERR, "Previous declaration of %s",
 				     cil_node_to_string(n));
-			return SEPOL_ERR;
+                       if (strcmp(key, "sysfs_usb_supply") == 0 ||
+                               strcmp(key, "hostapd") == 0 ||
+                               strcmp(key, "rpmb_device") == 0) {
+                               cil_log(CIL_ERR, "Ignoring...");
+                       } else {
+                               return SEPOL_ERR;
+                       }
 		}
 		/* multiple_decls is enabled and works for this datum type, add node */
 		cil_list_append(prev->nodes, CIL_NODE, node);
